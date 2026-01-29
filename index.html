@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>GRT 2050 Hologram Logos</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <style>
 body{
@@ -12,148 +11,114 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:
-    radial-gradient(circle at center,#081423,#01040a 70%);
-  overflow:hidden;
+  gap:120px;
+  background:radial-gradient(circle at center,#001018,#00040a 60%);
   font-family:sans-serif;
+  overflow:hidden;
 }
 
-/* ambient moving energy */
-body::before{
-  content:"";
-  position:fixed;
-  inset:-50%;
-  background:
-    radial-gradient(circle at 30% 30%,rgba(0,255,255,.15),transparent 60%),
-    radial-gradient(circle at 70% 70%,rgba(0,150,255,.12),transparent 60%);
-  animation:spin 20s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.stage{
-  display:flex;
-  gap:160px;
-  perspective:1800px;
-  z-index:1;
-}
-
+/* hologram card */
 .holo{
   width:420px;
-  height:300px;
-  position:relative;
-  transform-style:preserve-3d;
-  animation:float 6s ease-in-out infinite;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-12px)}
+  height:260px;
+  perspective:1200px;
 }
 
-/* energy shadow on floor */
-.holo::after{
-  content:"";
-  position:absolute;
-  bottom:-60px;
-  left:50%;
-  width:70%;
-  height:60px;
-  transform:translateX(-50%) rotateX(90deg);
-  background:radial-gradient(ellipse,rgba(0,255,255,.35),transparent 70%);
-  filter:blur(18px);
-}
-
-/* main crystal panel */
 .panel{
-  position:absolute;
-  inset:0;
-  border-radius:20px;
-  background:#000;
+  width:100%;
+  height:100%;
+  position:relative;
+  border-radius:24px;
   overflow:hidden;
+  background:#000;
   box-shadow:
-    0 60px 120px rgba(0,0,0,.9),
-    inset 0 0 25px rgba(255,255,255,.12),
-    0 0 60px rgba(0,255,255,.25);
-  transform:translateZ(60px);
+    0 0 40px rgba(0,255,255,0.25),
+    inset 0 0 30px rgba(0,255,255,0.15);
+  transform-style:preserve-3d;
+  transition:transform .2s ease;
+  animation:float 6s ease-in-out infinite;
 }
 
 .panel img{
   width:100%;
   height:100%;
   object-fit:cover;
+  display:block;
+  filter:contrast(1.15) saturate(1.2);
 }
 
-/* holographic color shift */
-.tint{
+/* neon edge */
+.panel::after{
+  content:"";
   position:absolute;
   inset:0;
-  mix-blend-mode:screen;
-  background:
-    linear-gradient(120deg,
-      rgba(0,255,255,.25),
-      rgba(0,0,255,.15),
-      rgba(255,0,255,.25));
+  border-radius:24px;
+  box-shadow:0 0 60px rgba(0,255,255,0.6);
   opacity:.6;
+  pointer-events:none;
 }
 
-/* moving specular light */
+/* light sweep */
 .light{
   position:absolute;
-  inset:-50%;
-  background:radial-gradient(circle,rgba(255,255,255,.6),transparent 60%);
-  mix-blend-mode:overlay;
-  pointer-events:none;
-  opacity:.35;
-  transition:transform .05s;
+  top:-100%;
+  left:-100%;
+  width:300%;
+  height:300%;
+  background:linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(255,255,255,0.35),
+    transparent 60%
+  );
+  transform:rotate(25deg);
+  animation:sweep 5s linear infinite;
+  mix-blend-mode:screen;
+}
+
+@keyframes sweep{
+  from{transform:translateX(-30%) rotate(25deg);}
+  to{transform:translateX(30%) rotate(25deg);}
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-14px);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="stage">
-
-  <div class="holo" data-holo>
-    <div class="panel">
-      <img src="GRT-LOGO-05.png">
-      <div class="tint"></div>
-      <div class="light"></div>
-    </div>
+<div class="holo">
+  <div class="panel">
+    <img src="GRT-LOGO-05.png" alt="Logo 1">
+    <div class="light"></div>
   </div>
+</div>
 
-  <div class="holo" data-holo>
-    <div class="panel">
-      <img src="GRT-LOGO-11.png">
-      <div class="tint"></div>
-      <div class="light"></div>
-    </div>
+<div class="holo">
+  <div class="panel">
+    <img src="GRT-LOGO-11.png" alt="Logo 2">
+    <div class="light"></div>
   </div>
-
 </div>
 
 <script>
-document.querySelectorAll("[data-holo]").forEach(holo=>{
-  const light=holo.querySelector(".light");
+document.querySelectorAll(".holo").forEach(card=>{
+  const panel = card.querySelector(".panel");
 
-  holo.addEventListener("mousemove",e=>{
-    const r=holo.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width;
-    const y=(e.clientY-r.top)/r.height;
+  card.addEventListener("mousemove",e=>{
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX-r.left)/r.width - .5;
+    const y = (e.clientY-r.top)/r.height - .5;
 
-    /* full 360 feel */
-    const ry=(x-0.5)*40;
-    const rx=(0.5-y)*40;
-
-    holo.style.transform=
-      `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(20px)`;
-
-    /* move light with finger */
-    light.style.transform=
-      `translate(${(x-0.5)*200}px,${(y-0.5)*200}px)`;
+    panel.style.transform =
+      `rotateY(${x*40}deg) rotateX(${-y*40}deg) scale(1.04)`;
   });
 
-  holo.addEventListener("mouseleave",()=>{
-    holo.style.transform="rotateX(0) rotateY(0)";
-    light.style.transform="translate(0,0)";
+  card.addEventListener("mouseleave",()=>{
+    panel.style.transform = "rotateY(0) rotateX(0) scale(1)";
   });
 });
 </script>
