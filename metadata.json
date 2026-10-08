@@ -1,0 +1,8 @@
+{
+  "name": "GRT 3D Hologram Logos",
+  "description": "Futuristic interactive 3D holographic display showcasing GRT logos and GitHub logo with perspective tilt and dynamic lighting.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "grt-3d-logo",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "GRT 3D Hologram Logos with GitHub integration",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node -e 'console.log(\"Build complete\")'"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
